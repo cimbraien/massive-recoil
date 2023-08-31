@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://camera/Camera.gd" type="Script" id=1]
+
+[node name="Camera" type="Camera2D"]
+position = Vector2( 320, 257 )
+current = true
+limit_left = -640
+limit_top = 0
+limit_right = 1280
+limit_bottom = 360
+limit_smoothed = true
+smoothing_enabled = true
+editor_draw_limits = true
+script = ExtResource( 1 )

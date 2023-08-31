@@ -1,0 +1,52 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://gym/gym_bottom_glow.png" type="Texture" id=1]
+[ext_resource path="res://gym/gym_top_glow.png" type="Texture" id=2]
+[ext_resource path="res://gym/gym_bg.png" type="Texture" id=3]
+[ext_resource path="res://gym/gym_lamps.png" type="Texture" id=4]
+
+[node name="GymBg" type="ParallaxBackground"]
+__meta__ = {
+"_editor_description_": "motion 1 = offset 0
+motion 0 = offset 100% (left up)
+motion 0.1 = offset 90% (left up)
+
+offset 100% = viewport size / 2
+so it is 320 180"
+}
+
+[node name="Wall" type="ParallaxLayer" parent="."]
+motion_scale = Vector2( 0.1, 0.1 )
+motion_offset = Vector2( -288, -162 )
+motion_mirroring = Vector2( 640, 360 )
+
+[node name="Sprite" type="Sprite" parent="Wall"]
+texture = ExtResource( 3 )
+centered = false
+
+[node name="Glow" type="ParallaxLayer" parent="."]
+motion_scale = Vector2( 0, 0 )
+motion_offset = Vector2( -320, -180 )
+
+[node name="Sprite" type="Sprite" parent="Glow"]
+position = Vector2( 0, 97 )
+texture = ExtResource( 1 )
+centered = false
+
+[node name="Shadow" type="ParallaxLayer" parent="."]
+motion_scale = Vector2( 0, 0 )
+motion_offset = Vector2( -320, -180 )
+
+[node name="Sprite" type="Sprite" parent="Shadow"]
+texture = ExtResource( 2 )
+centered = false
+
+[node name="Lights" type="ParallaxLayer" parent="."]
+motion_scale = Vector2( 0.1, 0.1 )
+motion_offset = Vector2( -288, -162 )
+motion_mirroring = Vector2( 640, 360 )
+
+[node name="Sprite" type="Sprite" parent="Lights"]
+position = Vector2( 76, 81 )
+texture = ExtResource( 4 )
+centered = false
