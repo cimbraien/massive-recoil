@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://player/bullet.png" type="Texture" id=1]
+[ext_resource path="res://player/Bullet.gd" type="Script" id=2]
+[ext_resource path="res://player/glow.png" type="Texture" id=3]
+
+[sub_resource type="Gradient" id=1]
+colors = PoolColorArray( 1, 1, 1, 0, 0.909804, 0.658824, 0.25098, 1 )
+
+[node name="Bullet" type="Sprite"]
+texture = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+unique_name_in_owner = true
+enabled = true
+cast_to = Vector2( 36, 0 )
+
+[node name="Line2D" type="Line2D" parent="."]
+unique_name_in_owner = true
+show_behind_parent = true
+width = 2.0
+gradient = SubResource( 1 )
+
+[node name="Light2D" type="Light2D" parent="."]
+texture = ExtResource( 3 )
+color = Color( 0.94902, 0.764706, 0.368627, 1 )
+range_layer_min = -100
