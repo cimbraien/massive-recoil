@@ -4,14 +4,20 @@ extends KinematicBody2D
 const BULLETSCENE: PackedScene = preload("res://player/Bullet.tscn")
 const MUZZLEFLASH: PackedScene = preload("res://player/MuzzleFlash.tscn")
 const BULLETSHELL: PackedScene = preload("res://player/BulletShell.tscn")
+const DUST: PackedScene = preload("res://dust/Dust.tscn")
+const AFTERIMAGE: PackedScene = preload("res://player/AfterImage.tscn")
 
 onready var sprite: Sprite = $"%Sprite"
 onready var sprite_2: Sprite = $"%Sprite2"  # fire 1st frame (hidden)
 onready var sprite_3: Sprite = $"%Sprite3"  # fire 2nd frame (hidden)
 onready var animator: AnimationPlayer = $"%AnimationPlayer"
 onready var aim_origin: Position2D = $"%AimOrigin"
+onready var after_image_maker: AnimationPlayer = $"%AfterImageMaker"
+
+# sfx
 onready var handgun_fire: AudioStreamPlayer = $"%Handgun"
 onready var land: AudioStreamPlayer = $"%Land"
+onready var dust_caller: AnimationPlayer = $"%DustCaller"
 
 const MAX_RUN: float = 180.0
 const MAX_FALL: float = 540.0
@@ -74,7 +80,7 @@ func _physics_process(delta: float) -> void:
 		# to fall
 		if not is_on_floor():
 			self.state = 2
-		# to run
+		# to idle
 		elif direction == 0:
 			self.state = 0
 		# jump
@@ -88,25 +94,21 @@ func _physics_process(delta: float) -> void:
 		# to idle
 		if is_on_floor() and direction == 0:
 			self.state = 0
-			land.play()
 		# to run
 		elif is_on_floor() and direction != 0:
 			self.state = 1
-			land.play()
 	# rise
 	elif state == 3:
 		# in state
 		# jump cancel
 		if not Input.is_action_pressed("jump"):
-			velocity.y += GRAVITY * delta
+			velocity.y *= 0.8
 		# to idle
 		if is_on_floor() and direction == 0:
 			self.state = 0
-			land.play()
 		# to run
 		elif is_on_floor() and direction != 0:
 			self.state = 1
-			land.play()
 		# to fall
 		elif velocity.y > 0:
 			self.state = 2
@@ -158,6 +160,7 @@ func _physics_process(delta: float) -> void:
 			handgun_fire.play()
 		# to fall
 		if not is_on_floor():
+			# make sure only sprite 1 is visible, hide the rest
 			animator.stop()
 			sprite.visible = true
 			sprite_2.visible = false
@@ -165,6 +168,7 @@ func _physics_process(delta: float) -> void:
 			self.state = 2
 		# aim
 		elif not Input.is_action_pressed("aim"):
+			# make sure only sprite 1 is visible, hide the rest
 			animator.stop()
 			sprite.visible = true
 			sprite_2.visible = false
@@ -185,22 +189,36 @@ func set_state(value):
 	
 	# jump
 	if state == 3:
+		_emit_dust()
 		velocity.y = JUMP_VEL
 	
 	# update anim
 	# idle
 	if state == 0:
+		after_image_maker.stop(true)
+		# play ToIdle for everyone except if coming from aim
 		if old_state == 4:
 			animator.play("AimToIdle")
 		else:
 			animator.play("ToIdle")
+		# stop dusts from run state
+		if old_state == 1:
+			dust_caller.stop(true)
+		# if prev in air
+		if old_state == 2 or old_state == 3:
+			land.play()
+			_emit_dust()
 	# run
 	elif state == 1:
-		# turn
+		dust_caller.play("EmitDust")
+		# turn or to run intro anim
 		if old_sprite_scale_x != sprite.scale.x:
 			animator.play("Turn")
 		elif old_sprite_scale_x == sprite.scale.x:
 			animator.play("ToRun")
+		# if prev in air
+		if old_state == 2 or old_state == 3:
+			land.play()
 	# fall
 	elif state == 2:
 		animator.play("ToFall")
@@ -209,7 +227,12 @@ func set_state(value):
 		animator.play("Rise")
 	# aim
 	elif state == 4:
+		after_image_maker.stop(true)
 		animator.stop()
+		
+	# exit idle or aim
+	if old_state == 0 and state != 4 or old_state == 4 and state != 0:
+		after_image_maker.play("default")
 
 
 func _on_AnimationPlayer_animation_finished(anim_name: String) -> void:
@@ -222,3 +245,17 @@ func _on_AnimationPlayer_animation_finished(anim_name: String) -> void:
 		animator.play("Fall")
 	elif anim_name == "Turn":
 		animator.play("Run")
+
+
+func _emit_dust() -> void:
+	var dust: Node2D = DUST.instance()
+	Shared.tree.current_scene.add_child(dust)
+	dust.global_position = global_position
+
+
+func _create_after_image() -> void:
+	var after_image: Node2D = AFTERIMAGE.instance()
+	Shared.tree.current_scene.add_child(after_image)
+	after_image.global_position = global_position
+	after_image.frame = sprite.frame
+	after_image.scale.x = sprite.scale.x

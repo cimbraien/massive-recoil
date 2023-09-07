@@ -1,6 +1,7 @@
 extends Sprite
 
 const BULLETHIT: PackedScene = preload("res://player/BulletHit.tscn")
+const BULLETHITENEMY: PackedScene = preload("res://player/BulletHitEnemy.tscn")
 
 onready var ray: RayCast2D = $"%RayCast2D"
 onready var line: Line2D = $"%Line2D"
@@ -39,15 +40,23 @@ func _process(delta: float) -> void:
 	or global_position.y <= cam_rect.position.y \
 	or global_position.y >= cam_rect.position.y + cam_rect.size.y:
 		queue_free()
-	# hit world
+	# hit world / hurtbox
 	if ray.is_colliding():
+		var collider: = ray.get_collider()
 		global_position = ray.get_collision_point()
 		queue_free()
-		# smoke
-		var bullet_hit = BULLETHIT.instance() as Particles2D
-		Shared.tree.current_scene.add_child(bullet_hit)
-		bullet_hit.global_position = ray.get_collision_point()
-		bullet_hit.rotation = ray.get_collision_normal().angle()
+		if collider.name == "Hurtbox":
+			collider.emit_signal("ouch", 1, ray.global_position)
+			# bullet hit enemy
+			var bullet_hit_enemy = BULLETHITENEMY.instance() as Particles2D
+			Shared.tree.current_scene.add_child(bullet_hit_enemy)
+			bullet_hit_enemy.global_position = ray.get_collision_point()
+		else:
+			# bullet hit
+			var bullet_hit = BULLETHIT.instance() as Particles2D
+			Shared.tree.current_scene.add_child(bullet_hit)
+			bullet_hit.global_position = ray.get_collision_point()
+			bullet_hit.rotation = ray.get_collision_normal().angle()
 	# line
 	line.add_point(global_position)
 	while line.get_point_count() > max_points:

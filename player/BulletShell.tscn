@@ -9,7 +9,7 @@ friction = 0.5
 bounce = 0.5
 
 [sub_resource type="CircleShape2D" id=6]
-radius = 4.0
+radius = 5.0
 
 [sub_resource type="Animation" id=8]
 resource_name = "default"
@@ -54,5 +54,9 @@ anims/default = SubResource( 8 )
 [node name="ShellBounce" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource( 3 )
+volume_db = -10.0
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
 
 [connection signal="body_entered" from="." to="." method="_on_BulletShell_body_entered" flags=6]
+[connection signal="viewport_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_viewport_exited"]

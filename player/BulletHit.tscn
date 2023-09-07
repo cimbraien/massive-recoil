@@ -160,10 +160,12 @@ tracks/5/keys = {
 }
 
 [node name="BulletHit" type="Particles2D"]
+emitting = false
 amount = 20
 lifetime = 0.2
 one_shot = true
 explosiveness = 0.9
+local_coords = false
 process_material = SubResource( 3 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
