@@ -447,28 +447,27 @@ position = Vector2( 0, -60 )
 [node name="Handgun" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource( 3 )
-volume_db = -10.0
+volume_db = -7.0
 
 [node name="Step1" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 5 )
-volume_db = -3.0
 
 [node name="Step2" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )
-volume_db = -10.0
+volume_db = -7.0
 
 [node name="Jump" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
-volume_db = -10.0
+volume_db = -7.0
 
 [node name="Land" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource( 7 )
-volume_db = -13.0
+volume_db = -10.0
 
 [node name="ToRun" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 8 )
-volume_db = -5.0
+volume_db = -2.0
 
 [node name="DustCaller" type="AnimationPlayer" parent="."]
 unique_name_in_owner = true

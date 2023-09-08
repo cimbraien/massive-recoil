@@ -10,6 +10,8 @@ const DEBRIS: PackedScene = preload("res://enemies/Debris.tscn")
 export var health: int = 1
 export var upside_down: bool = false
 
+onready var hit: AudioStreamPlayer = $"%Hit"
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
@@ -21,8 +23,10 @@ func _ready() -> void:
 
 
 func _on_Hurtbox_ouch(damage, pos) -> void:
+	hit.play()
 	health -= damage
 	if health <= 0:
+		Shared.camera.animator.play("Shake")
 		var hit_position: float = pos.y - hurtbox.global_position.y
 		if rotation_degrees == 0:
 			if hit_position < -10:

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/running fr fix 3 (2 Dec) 2.mp3-19ae8f84fc5381a616344770ac29eb14.mp3str"
+
+[deps]
+
+source_file="res://running fr fix 3 (2 Dec) 2.mp3"
+dest_files=[ "res://.import/running fr fix 3 (2 Dec) 2.mp3-19ae8f84fc5381a616344770ac29eb14.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

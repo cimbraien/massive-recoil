@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://gym/GymTile.tres" type="TileSet" id=1]
 [ext_resource path="res://gym/GymBg.tscn" type="PackedScene" id=2]
 [ext_resource path="res://player/Player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://camera/Camera.tscn" type="PackedScene" id=4]
 [ext_resource path="res://enemies/target/Target.tscn" type="PackedScene" id=5]
+[ext_resource path="res://deadlit 1.mp3" type="AudioStream" id=6]
 
 [node name="Test" type="Node"]
 __meta__ = {
@@ -41,5 +42,10 @@ upside_down = true
 position = Vector2( 576, 288 )
 scale = Vector2( -1, 1 )
 health = 10
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+volume_db = -20.0
+autoplay = true
 
 [editable path="Player"]

@@ -13,7 +13,6 @@ var line_points: Array = []
 var max_points: int = 5
 var frame_no: int = 0
 
-
 func _ready() -> void:
 	line.set_as_toplevel(true)
 	visible = false
@@ -50,7 +49,7 @@ func _process(delta: float) -> void:
 			# bullet hit enemy
 			var bullet_hit_enemy = BULLETHITENEMY.instance() as Particles2D
 			Shared.tree.current_scene.add_child(bullet_hit_enemy)
-			bullet_hit_enemy.global_position = ray.get_collision_point()
+			bullet_hit_enemy.global_position = ray.get_collision_point() + Vector2(rand_range(10.0, -10.0), rand_range(10.0, -10.0))
 		else:
 			# bullet hit
 			var bullet_hit = BULLETHIT.instance() as Particles2D
