@@ -2,7 +2,7 @@ extends GridContainer
 var start_pos: Vector2
 var last_pos: Vector2
 var is_clicked: bool
-onready var slot_size: int = get_child(0).rect_size.x
+onready var slot_size: int = get_child(0).rect_size.x setget , _get_slot_size
 onready var rows: int = get_child_count()/columns
 
 signal selection_changed
@@ -62,3 +62,6 @@ func _on_click():
 func _on_release():
 	is_clicked = false
 	pass
+
+func _get_slot_size():
+	return slot_size

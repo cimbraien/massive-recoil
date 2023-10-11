@@ -1,5 +1,6 @@
 extends Panel
 var texture = preload("res://inventory/grid.png")
+var item
 
 func _ready():
 	self.focus_mode = Control.FOCUS_CLICK
