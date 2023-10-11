@@ -1,8 +1,10 @@
-extends Panel
+class_name Slot extends Panel
 var texture = preload("res://inventory/grid.png")
+var item
 
 func _ready():
 	self.focus_mode = Control.FOCUS_CLICK
+	self.rect_size = Vector2(Shared.SLOT_SIZE, Shared.SLOT_SIZE)
 	_render(_get_stylebox(false))
 	pass
 
