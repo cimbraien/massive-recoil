@@ -34,7 +34,7 @@ func _reset_active_slots():
 	for slot in get_children():
 		slot._set_focus(false)
 	
-func _get_slot(x: float, y: float):
+func _get_slot(x: float, y: float) -> Slot:
 	var index: int = y * columns + x
 	return get_children()[index]
 

@@ -2,6 +2,7 @@ class_name Inventory extends Node
 
 onready var gui: TextureRect = $InventoryGUI
 onready var toggleAnimation = $InventoryGUI/Toggle
+onready var slotGrid = $InventoryGUI/SlotGrid
 var inventory_items : Array
 
 func _ready():
@@ -10,9 +11,9 @@ func _ready():
 
 func _init():
 	inventory_items = []
-	var snowball = InventoryItemFactory.new("SNOWBALL", Vector2(3,2))._build()
-	var snowball2 = InventoryItemFactory.new("SNOWBALL", Vector2(1,3))._build()
-	var snowball3 = InventoryItemFactory.new("SNOWBALL", Vector2(6,1))._build()
+	var snowball = InventoryItemFactory.new("SNOWBALL", Vector2(0,0))._build()
+	var snowball2 = InventoryItemFactory.new("SNOWBALL2", Vector2(1,0))._build()
+	var snowball3 = InventoryItemFactory.new("SNOWBALL3", Vector2(3,0))._build()
 	inventory_items.append(snowball)
 	inventory_items.append(snowball2)
 	inventory_items.append(snowball3)
@@ -26,15 +27,16 @@ func _input(event):
 			_openGui()
 
 func _render_items():
-	for item in inventory_items:
-		var slot: Slot = $InventoryGUI/SlotGrid._get_slot(item.pos.x, item.pos.y)
-		var container = _create_item_container()
-		container.add_child(item._get_item_texture())
-		slot.add_child(container)
+	for inventory_item in inventory_items:
+		var slot: Slot = slotGrid._get_slot(inventory_item.pos.x, inventory_item.pos.y)
+		slot.container.add_child(inventory_item._get_item())
 
-func _create_item_container():
-	var container = CenterContainer.new();
-	return container
+func _cleanup_items():
+	var slot_grid = self.get_child(0).get_child(0)
+	for slot in slot_grid.get_children():
+		if slot.container.get_child_count() == 0:
+			continue
+		slot.container.remove_child(slot.container.get_child(0))
 
 func _openGui():
 	$InventoryGUI/ToggleOn.play()
@@ -47,3 +49,4 @@ func _closeGui():
 	toggleAnimation.play("close")
 	yield(toggleAnimation, "animation_finished")
 	gui.visible = false
+	_cleanup_items()	
