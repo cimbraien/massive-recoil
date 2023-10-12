@@ -86,7 +86,6 @@ func _on_release():
 	var end_pos = Vector2(min(max(0, raw_end_pos.x), columns-dim.x), min(max(0, raw_end_pos.y), rows-dim.y))
 	
 	var area = Rect2(end_pos, dim)
-	print(_position_can_move(clicked_inventory_item, area))
 	if(_position_can_move(clicked_inventory_item, area)):
 		clicked_inventory_item.pos = end_pos
 
